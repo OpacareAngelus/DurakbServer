@@ -188,6 +188,15 @@ suspend fun handleMessage(
                 println("Room ${room.code}: Sent joined to player $playerId")
             }
 
+            "leave" -> {
+                val code = client.allRooms.firstOrNull { key: String -> rooms.containsKey(key) } ?: return
+                val room = rooms[code] ?: return
+                val playerId = getPlayerIdByClient(client, room) ?: return
+                room.removePlayer(playerId)
+                client.leaveRoom(code)
+                println("Room $code: Player $playerId left via message")
+            }
+
             "move" -> {
                 val code = client.allRooms.firstOrNull { key: String -> rooms.containsKey(key) } ?: return
                 val room = rooms[code] ?: return
