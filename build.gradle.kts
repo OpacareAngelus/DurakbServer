@@ -1,6 +1,7 @@
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.9.20"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.20"
+    id("com.gradleup.shadow") version "9.2.2"
     id("application")
 }
 
@@ -29,4 +30,19 @@ application {
 
 tasks.named<JavaExec>("run") {
     standardInput = System.`in`
+}
+
+tasks {
+    shadowJar {
+        archiveBaseName.set("durakb")
+        archiveVersion.set("")
+        archiveClassifier.set("")
+        mergeServiceFiles()
+        exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
+        manifest {
+            attributes(
+                "Main-Class" to "server.MainKt"
+            )
+        }
+    }
 }
